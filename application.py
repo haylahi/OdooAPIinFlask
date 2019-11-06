@@ -8,17 +8,18 @@ from xmlrpc import client
 def index():
     return 'Index Home Page'
 
-@app.route('/hello')
-def hello():
-    return 'Hello, World'
-
-@app.route('/connect', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def connect():
-    if request.method == 'GET':
+    if request.method == 'POST':
+        print (request.json)
+        request_data = request.json
+        username = request_data['email']
+        password = request_data['password']
+        print(username + ' pass ' + password)
         params = {
             'db': 'bel-20191013',
-            'login': 'admin@amarbay.com',
-            'password': '123'
+            'login': username,
+            'password': password
         }
         odoo_url = 'http://localhost:8069/web/session/authenticate'
         headers = {
@@ -34,9 +35,17 @@ def connect():
         # dump(response)
 
         return jsonify(response.json())
+    else: 
+        print('GET Request')
 
-    else:
-        return 'GET request!'
+    # elif request.method == 'POST':
+    #     print (request.json)
+    #     request_data = request.json
+    #     username_form = request_data['email']
+    #     password_form = request_data['password']
+    #     print(username_form + ' pass ' + password_form)
+    #     response = json.dumps({'username' : username_form, 'password': password_form})
+    #     return jsonify(response)
 
 @app.route('/mobile/shop_list', methods=['GET', 'POST'])
 def shop_list():
@@ -62,7 +71,7 @@ def shop_list():
 
     return jsonify(shop_list)
 
-@app.route('/login')
+@app.route('/connect')
 def login():
     url = 'http://localhost:8069'
     db = 'bel-20191013'
