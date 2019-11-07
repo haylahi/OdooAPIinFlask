@@ -55,6 +55,8 @@ def shop_list():
         response = json.dumps({'sessionId' : sessionId})
         print(response)
         # return "post request"
+    if request.method == 'GET':
+        return 'Get Req'
     # params = {
     #     'db': 'bel-20191013',
     # }
