@@ -4,6 +4,9 @@ app = Flask(__name__)
 import json
 from xmlrpc import client
 
+# base_url = 'http://localhost:8069'
+base_url = 'https://report.amarbay.com/'
+
 @app.route('/')
 def index():
     return 'Index Home Page'
@@ -21,7 +24,7 @@ def connect():
             'login': username,
             'password': password
         }
-        odoo_url = 'http://localhost:8069/web/session/authenticate'
+        odoo_url = base_url + '/web/session/authenticate'
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -61,7 +64,7 @@ def shop_list():
     #     'db': 'bel-20191013',
     # }
     params = {}
-    url = 'http://localhost:8069/mobile/shop_list'
+    url = base_url + '/mobile/shop_list'
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
