@@ -49,16 +49,21 @@ def connect():
 
 @app.route('/mobile/shop_list', methods=['GET', 'POST'])
 def shop_list():
-    params = {
-        'db': 'bel-20191013',
-        'login': 'admin@amarbay.com',
-        'password': '123'
-    }
+    if request.method == 'POST':
+        request_data = request.json
+        sessionId = request_data['sessionID']
+        response = json.dumps({'sessionId' : sessionId})
+        print(response)
+        # return "post request"
+    # params = {
+    #     'db': 'bel-20191013',
+    # }
+    params = {}
     url = 'http://localhost:8069/mobile/shop_list'
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Cookie': 'website_lang=en_US; _ga=GA1.1.33133517.1567570711; session_id=f1b1e668dd482c9de2a9ceb326632d8d6e214fff'
+        'Cookie': 'session_id= %s'%sessionId
     }
     # headers = json.dumps(headers)
 
@@ -67,7 +72,7 @@ def shop_list():
     shop_data = response.json()
     shop_list = json.loads(shop_data['result'])
 
-    print(shop_data['result'])
+    # print(shop_data['result'])
 
     return jsonify(shop_list)
 
