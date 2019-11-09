@@ -6,6 +6,8 @@ from xmlrpc import client
 
 # base_url = 'http://localhost:8069'
 base_url = 'https://report.amarbay.com'
+db = 'bayerp-db-server'
+# 'bel-20191013'
 
 @app.route('/')
 def index():
@@ -20,7 +22,7 @@ def connect():
         password = request_data['password']
         print(username + ' pass ' + password)
         params = {
-            'db': 'bel-20191013',
+            'db': db,
             'login': username,
             'password': password
         }
