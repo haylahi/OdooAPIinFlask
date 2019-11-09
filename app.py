@@ -38,7 +38,8 @@ def connect():
         # dump(response)
 
         return jsonify(response.json())
-    else: 
+    else:
+        return 'GET Request'
         print('GET Request')
 
     # elif request.method == 'POST':
