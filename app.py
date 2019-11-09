@@ -5,7 +5,7 @@ import json
 from xmlrpc import client
 
 # base_url = 'http://localhost:8069'
-base_url = 'https://report.amarbay.com/'
+base_url = 'https://report.amarbay.com'
 
 @app.route('/')
 def index():
