@@ -4,8 +4,8 @@ app = Flask(__name__)
 import json
 from xmlrpc import client
 
-# base_url = 'http://localhost:8069'
-base_url = 'https://report.amarbay.com'
+base_url = 'http://localhost:8069'
+# base_url = 'https://report.amarbay.com'
 db = 'bayerp-db-server'
 # 'bel-20191013'
 
