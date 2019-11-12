@@ -6,8 +6,8 @@ from xmlrpc import client
 
 base_url = 'http://localhost:8069'
 # base_url = 'https://report.amarbay.com'
-db = 'bayerp-db-server'
-# 'bel-20191013'
+# db = 'bayerp-db-server'
+db = 'bel-20191112'
 
 @app.route('/')
 def index():
@@ -80,7 +80,7 @@ def shop_list():
     shop_data = response.json()
     shop_list = json.loads(shop_data['result'])
 
-    # print(shop_data['result'])
+    print(shop_data['result'])
 
     return jsonify(shop_list)
 
