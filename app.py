@@ -41,7 +41,24 @@ def connect():
 
         return jsonify(response.json())
     else:
-        return 'GET Request'
+        params = {
+            'db': db,
+            'login': 'admin@amarbay.com',
+            'password': '123'
+        }
+        odoo_url = base_url + '/web/session/authenticate'
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Length': str(len(json.dumps(params)))
+        }
+        # headers = json.dumps(headers)
+
+        response = requests.post(url = odoo_url, data= json.dumps({'params': params}) , headers= headers)
+
+        print(response.json())
+        return jsonify(response.json())
+        # return 'GET Request'
         print('GET Request')
 
     # elif request.method == 'POST':
@@ -83,6 +100,34 @@ def shop_list():
     print(shop_data['result'])
 
     return jsonify(shop_list)
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    if request.method == 'POST':
+        request_data = request.json
+        sessionId = request_data['sessionID']
+        requestData = json.dumps({'sessionId' : sessionId})
+        print(requestData)
+        print("post req " + sessionId)
+        # return ("post req " + sessionId)
+        
+        response = Response(requestData,content_type='application/json; charset=utf-8')
+        response.headers.add('content-length',len(requestData))
+        response.status_code=200
+        return response
+    if request.method == 'GET':
+        params = {}
+        url = base_url + '/web/session/destroy'
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Cookie': 'session_id= 31074f7793e2af7c487c0ff40c80b0009785811b'
+        }
+        # headers = json.dumps(headers)
+
+        response = requests.post(url = url, data = json.dumps({'jsonrpc': '2.0', 'method': 'call', 'params': params}) , headers = headers)
+        print(response.json())
+        return 'Get Req'
 
 @app.route('/connect')
 def login():
