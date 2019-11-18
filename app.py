@@ -4,6 +4,11 @@ app = Flask(__name__)
 import json
 from xmlrpc import client
 
+base_url = 'http://localhost:8069'
+# base_url = 'https://report.amarbay.com'
+# db = 'bayerp-db-server'
+db = 'bel-20191112'
+
 @app.route('/')
 def index():
     return 'Index Home Page'
@@ -17,11 +22,11 @@ def connect():
         password = request_data['password']
         print(username + ' pass ' + password)
         params = {
-            'db': 'bel-20191013',
+            'db': db,
             'login': username,
             'password': password
         }
-        odoo_url = 'http://localhost:8069/web/session/authenticate'
+        odoo_url = base_url + '/web/session/authenticate'
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -35,7 +40,25 @@ def connect():
         # dump(response)
 
         return jsonify(response.json())
-    else: 
+    else:
+        params = {
+            'db': db,
+            'login': 'admin@amarbay.com',
+            'password': '123'
+        }
+        odoo_url = base_url + '/web/session/authenticate'
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Length': str(len(json.dumps(params)))
+        }
+        # headers = json.dumps(headers)
+
+        response = requests.post(url = odoo_url, data= json.dumps({'params': params}) , headers= headers)
+
+        print(response.json())
+        return jsonify(response.json())
+        # return 'GET Request'
         print('GET Request')
 
     # elif request.method == 'POST':
@@ -55,11 +78,13 @@ def shop_list():
         response = json.dumps({'sessionId' : sessionId})
         print(response)
         # return "post request"
+    if request.method == 'GET':
+        return 'Get Req'
     # params = {
     #     'db': 'bel-20191013',
     # }
     params = {}
-    url = 'http://localhost:8069/mobile/shop_list'
+    url = base_url + '/mobile/shop_list'
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -72,9 +97,37 @@ def shop_list():
     shop_data = response.json()
     shop_list = json.loads(shop_data['result'])
 
-    # print(shop_data['result'])
+    print(shop_data['result'])
 
     return jsonify(shop_list)
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    if request.method == 'POST':
+        request_data = request.json
+        sessionId = request_data['sessionID']
+        requestData = json.dumps({'sessionId' : sessionId})
+        print(requestData)
+        print("post req " + sessionId)
+        # return ("post req " + sessionId)
+        
+        response = Response(requestData,content_type='application/json; charset=utf-8')
+        response.headers.add('content-length',len(requestData))
+        response.status_code=200
+        return response
+    if request.method == 'GET':
+        params = {}
+        url = base_url + '/web/session/destroy'
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Cookie': 'session_id= 31074f7793e2af7c487c0ff40c80b0009785811b'
+        }
+        # headers = json.dumps(headers)
+
+        response = requests.post(url = url, data = json.dumps({'jsonrpc': '2.0', 'method': 'call', 'params': params}) , headers = headers)
+        print(response.json())
+        return 'Get Req'
 
 @app.route('/connect')
 def login():
