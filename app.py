@@ -7,7 +7,7 @@ from xmlrpc import client
 base_url = 'http://localhost:8069'
 # base_url = 'https://report.amarbay.com'
 # db = 'bayerp-db-server'
-db = 'bel-20191112'
+db = 'bel-20191217'
 
 @app.route('/')
 def index():
@@ -110,7 +110,7 @@ def logout():
         print(requestData)
         print("post req " + sessionId)
         # return ("post req " + sessionId)
-        
+
         response = Response(requestData,content_type='application/json; charset=utf-8')
         response.headers.add('content-length',len(requestData))
         response.status_code=200
@@ -149,7 +149,7 @@ def login():
     response.headers.add('content-length',len(shop_data))
     response.status_code=200
     # return json.loads(shop_data)
-    
+
     # response = str(uid)
     return str(uid)
 
@@ -160,3 +160,30 @@ def get_shop_list():
     response.headers.add('content-length',len(shop_data))
     response.status_code=200
     return response
+
+@app.route('/today_sale_list', methods=['GET', 'POST'])
+def get_today_sale():
+    if request.method == 'POST':
+        request_data = request.json
+        sessionId = request_data['sessionID']
+        # return "post request"
+
+    elif request.method == 'GET':
+
+        sessionId = '10ad9d402e87d1ea6b94634bf9ac185d4f7305b5'
+
+
+    params = {}
+    url = base_url + '/mobile/today_sale_list2'
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Cookie': 'session_id= %s'%sessionId
+    }
+
+    odooResponse = requests.post(url = url, data = json.dumps({'jsonrpc': '2.0', 'method': 'call', 'params': params}) , headers = headers)
+
+    today_sale_data = odooResponse.json()
+    today_sale_list = json.loads(today_sale_data['result'])
+
+    return jsonify(today_sale_list)
