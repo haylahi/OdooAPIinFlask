@@ -184,6 +184,7 @@ def get_today_sale():
     odooResponse = requests.post(url = url, data = json.dumps({'jsonrpc': '2.0', 'method': 'call', 'params': params}) , headers = headers)
 
     today_sale_data = odooResponse.json()
+    # print(today_sale_data)
     today_sale_list = json.loads(today_sale_data['result'])
 
     return jsonify(today_sale_list)
