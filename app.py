@@ -59,7 +59,7 @@ def connect():
         print(response.json())
         return jsonify(response.json())
         # return 'GET Request'
-        print('GET Request')
+        # print('GET Request')
 
     # elif request.method == 'POST':
     #     print (request.json)
