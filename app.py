@@ -4,10 +4,11 @@ app = Flask(__name__)
 import json
 from xmlrpc import client
 
-base_url = 'http://localhost:8069'
+base_url = 'http://202.84.46.172:8069'
+# base_url = 'http://192.168.44.20:8069'
 # base_url = 'https://report.amarbay.com'
 # db = 'bayerp-db-server'
-db = 'bel-20191217'
+db = 'bel-20200112'
 
 @app.route('/')
 def index():
